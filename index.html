@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101d2b">
+<meta name="description" content="CIRTA RADAR — مساعد ذكي للسائقين">
+<link rel="manifest" href="manifest.webmanifest">
+<title>CIRTA RADAR</title>
+<style>
+:root{--bg:#0c1622;--panel:#142333;--panel2:#192c40;--line:#294057;--text:#eef5fb;--muted:#9bb0c3;--mint:#5bd6b0;--yellow:#f2c66d;--red:#f07878;--blue:#75b9ef}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#1d3a50 0,transparent 36%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}
+button,input{font:inherit}.app{max-width:520px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(86px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;padding:17px 0 12px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#1b4555,#132b3b);display:grid;place-items:center;border:1px solid #386477}.logo svg{width:27px}.brand b{font-size:17px;letter-spacing:1.3px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:1.1px;margin-top:2px}.status{font-size:11px;color:var(--mint);border:1px solid #285c52;background:#15372f;padding:7px 10px;border-radius:20px}
+h1{font-size:22px;margin:16px 0 4px}.sub{color:var(--muted);font-size:12px;line-height:1.7;margin:0 0 16px}.demo{display:inline-flex;gap:6px;align-items:center;background:#47391d;color:#f5d58f;border:1px solid #76602e;border-radius:20px;padding:5px 9px;font-size:10px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:17px;padding:14px;min-width:0}.metric .label{color:var(--muted);font-size:11px}.metric strong{font-size:22px;display:block;margin-top:7px}.metric em{font-style:normal;font-size:10px;color:var(--mint)}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px}.section-title b{font-size:14px}.section-title span{font-size:10px;color:var(--muted)}
+.map{height:245px;position:relative;overflow:hidden;background:#122638;border:1px solid #2b465c;border-radius:18px}
+.map:before,.map:after{content:"";position:absolute;inset:-30%;background:repeating-linear-gradient(32deg,transparent 0 34px,#38536a 35px 38px,transparent 39px 78px);opacity:.42;transform:rotate(-8deg)}
+.map:after{background:repeating-linear-gradient(118deg,transparent 0 48px,#29465b 49px 52px,transparent 53px 100px);opacity:.55}
+.river{position:absolute;width:130%;height:24px;background:#1b5366;transform:rotate(-24deg);top:47%;right:-15%;z-index:1;border:1px solid #28677a}
+.road{position:absolute;height:5px;background:#8a9a9c;opacity:.6;z-index:2;transform-origin:center}.r1{width:90%;top:42%;right:3%;transform:rotate(16deg)}.r2{width:78%;top:65%;right:10%;transform:rotate(-20deg)}.r3{width:70%;top:24%;right:14%;transform:rotate(-8deg)}
+.zone{position:absolute;z-index:3;border-radius:50%;filter:blur(1px);opacity:.28}.z1{width:90px;height:90px;right:28%;top:24%;background:#5bd6b0;box-shadow:0 0 35px 18px #5bd6b0}.z2{width:75px;height:75px;right:65%;top:57%;background:#f2c66d;box-shadow:0 0 30px 14px #f2c66d}.z3{width:65px;height:65px;right:8%;top:60%;background:#f07878;box-shadow:0 0 28px 12px #f07878}
+.pin{position:absolute;z-index:4;font-size:11px;background:#0b1927;border:1px solid #49677d;padding:5px 8px;border-radius:9px;white-space:nowrap}.p1{top:27%;right:24%}.p2{top:65%;right:57%}.p3{top:68%;right:5%}
+.map-note{position:absolute;bottom:10px;left:10px;z-index:5;background:#0b1927d9;color:#c6d5e2;padding:6px 9px;border-radius:8px;font-size:9px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:9px;color:var(--muted);font-size:10px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:4px}
+.request{display:flex;align-items:center;gap:10px}.platform{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#20384c;color:var(--mint);font-weight:800}.request .info{flex:1;min-width:0}.request b{font-size:12px}.request small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.fare{font-size:15px;font-weight:700;white-space:nowrap}.muted{color:var(--muted)}
+.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--mint);color:#09221d;font-weight:700;width:100%;cursor:pointer}.btn.secondary{background:#20384c;color:var(--text);border:1px solid #3a566e}.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.panel{display:none}.panel.active{display:block}
+.nav{position:fixed;bottom:0;left:0;right:0;max-width:520px;margin:auto;background:#101e2cf2;backdrop-filter:blur(14px);border-top:1px solid #294057;display:grid;grid-template-columns:repeat(4,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom));z-index:10}
+.nav button{background:none;border:0;color:#8da4b8;font-size:10px;padding:5px 0;display:grid;gap:4px;justify-items:center}.nav button.active{color:var(--mint)}.nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
+.rowline{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #294057;font-size:12px}.rowline:last-child{border:0}
+input{width:100%;background:#0e1b29;border:1px solid #38536a;color:var(--text);border-radius:10px;padding:12px;margin:6px 0 12px}
+label{font-size:11px;color:var(--muted)}.notice{background:#302a1b;border:1px solid #66552e;color:#f2d28c;padding:11px;border-radius:12px;font-size:11px;line-height:1.7;margin-top:12px}
+.footer{font-size:10px;color:#8096a9;text-align:center;margin:20px 0 8px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand">
+  <div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="#65dfbd" stroke-width="1.5"><circle cx="16" cy="16" r="13"/><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="3"/><path d="M16 16 27 6"/></svg></div>
+  <div><b>CIRTA RADAR</b><small>SMART DRIVER INTELLIGENCE</small></div>
+ </div>
+ <div class="status">● الوضع الذكي</div>
+</header>
+
+<main id="dashboard" class="panel active">
+ <h1>مرحباً بك في Cirta Radar</h1>
+ <p class="sub">لوحة قيادة موحدة لمتابعة نشاطك وتحسين قرارات الرحلات.</p>
+ <div class="demo">● بيانات تجريبية — ليست طلبات حية</div>
+ <div class="grid">
+  <div class="card metric"><div class="label">صافي الربح اليوم</div><strong>— دج</strong><em>يظهر بعد تسجيل الرحلات</em></div>
+  <div class="card metric"><div class="label">الرحلات المسجلة</div><strong>0</strong><em>بانتظار بياناتك</em></div>
+  <div class="card metric"><div class="label">وقت العمل</div><strong>0 س</strong><span class="muted" style="font-size:10px">يُحسب من سجل الجلسات</span></div>
+  <div class="card metric"><div class="label">تكلفة الكيلومتر</div><strong>— دج</strong><span class="muted" style="font-size:10px">تحتاج قياس استهلاك السيارة</span></div>
+ </div>
+ <div class="section-title"><b>خريطة قسنطينة التجريبية</b><span>عرض توضيحي فقط</span></div>
+ <div class="map">
+  <div class="river"></div><div class="road r1"></div><div class="road r2"></div><div class="road r3"></div>
+  <div class="zone z1"></div><div class="zone z2"></div><div class="zone z3"></div>
+  <div class="pin p1">وسط المدينة</div><div class="pin p2">زواغي</div><div class="pin p3">الخروب</div>
+  <div class="map-note">خريطة شكلية وليست خريطة ملاحة</div>
+ </div>
+ <div class="legend"><span><i class="dot" style="background:var(--mint)"></i>منطقة اختبار</span><span><i class="dot" style="background:var(--yellow)"></i>غير مؤكدة</span><span><i class="dot" style="background:var(--red)"></i>بيانات غير متاحة</span></div>
+ <div class="section-title"><b>رادار الطلبات</b><span>التسجيل اليدوي في هذه النسخة</span></div>
+ <div class="card">
+  <div class="request"><div class="platform">CR</div><div class="info"><b>لا توجد طلبات مسجلة</b><small>عند وصول طلب، سجّله لتحليل أدائه.</small></div><div class="fare">—</div></div>
+  <div class="btnrow"><button class="btn" onclick="show('requests')">تسجيل طلب</button><button class="btn secondary" onclick="show('traffic')">حالة الطرق</button></div>
+ </div>
+</main>
+
+<section id="requests" class="panel">
+ <h1>رادار الطلبات</h1><p class="sub">سجّل المعلومات التي تظهر لك في تطبيق منصة النقل. لا يوجد اتصال حي بالمنصات في هذا النموذج.</p>
+ <div class="card">
+  <label>المنصة</label><select id="platform" style="width:100%;background:#0e1b29;color:white;border:1px solid #38536a;border-radius:10px;padding:12px;margin:6px 0 12px"><option>Yassir</option><option>inDrive</option></select>
+  <label>الأجرة المعروضة (دج)</label><input id="fareInput" type="number" min="0" placeholder="مثال: 450">
+  <label>المسافة الإجمالية المقدرة (كم)</label><input id="distanceInput" type="number" min="0" step="0.1" placeholder="مثال: 5.2">
+  <label>منطقة الانطلاق</label><input id="areaInput" placeholder="مثال: وسط المدينة">
+  <label>ملاحظات (اختياري)</label><input id="notesInput" placeholder="ازدحام، وقت انتظار...">
+  <button class="btn" onclick="addRequest()">حفظ الطلب</button>
+ </div>
+ <div class="section-title"><b>سجل الطلبات</b><span id="requestCount">0 طلب</span></div><div id="requestList" class="card"><p class="muted" style="font-size:12px">لا توجد بيانات بعد.</p></div>
+</section>
+
+<section id="traffic" class="panel">
+ <h1>حالة الطرق</h1><p class="sub">في النسخة الحالية لا يوجد مصدر مرور مباشر متصل. يمكنك تسجيل ملاحظاتك الميدانية.</p>
+ <div class="card">
+  <label>المنطقة</label><input id="trafficArea" placeholder="اسم المنطقة">
+  <label>حالة الطريق</label><select id="trafficState" style="width:100%;background:#0e1b29;color:white;border:1px solid #38536a;border-radius:10px;padding:12px;margin:6px 0 12px"><option>سلس</option><option>متوسط</option><option>مزدحم</option><option>حادث أو إغلاق</option></select>
+  <button class="btn" onclick="addTraffic()">حفظ الملاحظة</button>
+ </div>
+ <div id="trafficList" class="card" style="margin-top:12px"><span class="muted" style="font-size:12px">لم تسجل ملاحظات مرورية.</span></div>
+ <div class="notice">الربط المباشر بمصادر المرور مثل مزودي الخرائط يحتاج إلى مفتاح API وشروط استخدام مناسبة للجزائر. لن نعرض بيانات مرور حية قبل توفير المصدر.</div>
+</section>
+
+<section id="earnings" class="panel">
+ <h1>الأرباح والتكاليف</h1><p class="sub">ابدأ بتسجيل الرحلات والمصاريف للحصول على حساب واقعي لصافي الربح.</p>
+ <div class="grid">
+  <div class="card metric"><div class="label">إجمالي الأجرة المسجلة</div><strong id="totalFare">0 دج</strong></div>
+  <div class="card metric"><div class="label">المصاريف المسجلة</div><strong id="totalCost">0 دج</strong></div>
+ </div>
+ <div class="card" style="margin-top:10px">
+  <label>إضافة مصروف (دج)</label><input id="expenseInput" type="number" min="0" placeholder="مثال: وقود أو صيانة">
+  <label>نوع المصروف</label><input id="expenseType" placeholder="GPL، صيانة، عمولة...">
+  <button class="btn" onclick="addExpense()">إضافة المصروف</button>
+  <div class="rowline"><span>صافي أولي مسجل</span><b id="netTotal">0 دج</b></div>
+ </div>
+ <div class="notice">الحساب الأولي لا يشمل تلقائياً عمولات المنصات أو استهلاك السيارة أو تكاليف لم تسجلها. أضف جميع المصاريف للحصول على نتيجة أقرب للواقع.</div>
+</section>
+
+<section id="settings" class="panel">
+ <h1>الإعدادات</h1><p class="sub">إعدادات النسخة التجريبية على جهازك.</p>
+ <div class="card">
+  <div class="rowline"><span>وضع التشغيل</span><b style="color:var(--mint)">ذكي</b></div>
+  <div class="rowline"><span>المنطقة التجريبية</span><b>قسنطينة</b></div>
+  <div class="rowline"><span>السيارة</span><b>Hyundai i10 · 2009 · GPL</b></div>
+  <div class="rowline"><span>الربط مع Yassir / inDrive</span><b style="color:var(--yellow)">غير متصل</b></div>
+  <div class="rowline"><span>الحساب السحابي</span><b>غير مفعّل</b></div>
+ </div>
+ <div class="notice">هذه نسخة واجهة أولية محلية. البيانات تحفظ على هذا المتصفح فقط ولا تنتقل تلقائياً إلى هاتف آخر.</div>
+ <button class="btn secondary" style="margin-top:12px" onclick="exportData()">تصدير بياناتي بصيغة JSON</button>
+ <button class="btn secondary" style="margin-top:8px" onclick="clearData()">مسح بيانات التجربة</button>
+</section>
+
+<div class="footer">CIRTA RADAR · Prototype v0.1 · بياناتك محلية على هذا الجهاز</div>
+</main>
+
+<nav class="nav">
+ <button class="active" data-tab="dashboard" onclick="show('dashboard',this)"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/></svg>الرئيسية</button>
+ <button data-tab="requests" onclick="show('requests',this)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5M11 7v8M7 11h8"/></svg>الطلبات</button>
+ <button data-tab="earnings" onclick="show('earnings',this)"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h4"/></svg>الأرباح</button>
+ <button data-tab="settings" onclick="show('settings',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 2.9-.2-.1a1.7 1.7 0 0 0-1.8.1l-.2.1h-3.4l-.1-.2a1.7 1.7 0 0 0-1.6-1l-.2.1-3-1.7.1-.2a1.7 1.7 0 0 0-.1-1.8l-.1-.2v-3.4l.2-.1a1.7 1.7 0 0 0 1-1.6l-.1-.2 1.7-3 .2.1a1.7 1.7 0 0 0 1.8-.1l.2-.1h3.4l.1.2a1.7 1.7 0 0 0 1.6 1l.2-.1 3 1.7-.1.2a1.7 1.7 0 0 0 .1 1.8l.1.2v3.4z"/></svg>الإعدادات</button>
+</nav>
+</div>
+<script>
+const state={requests:JSON.parse(localStorage.getItem('cr_requests')||'[]'),expenses:JSON.parse(localStorage.getItem('cr_expenses')||'[]'),traffic:JSON.parse(localStorage.getItem('cr_traffic')||'[]')};
+function persist(){localStorage.setItem('cr_requests',JSON.stringify(state.requests));localStorage.setItem('cr_expenses',JSON.stringify(state.expenses));localStorage.setItem('cr_traffic',JSON.stringify(state.traffic));render()}
+function show(id,btn){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));const b=btn||document.querySelector(`[data-tab="${id}"]`);if(b)b.classList.add('active');window.scrollTo(0,0)}
+function addRequest(){const fare=Number(document.getElementById('fareInput').value),distance=Number(document.getElementById('distanceInput').value);if(!(fare>0)){alert('أدخل أجرة صحيحة');return}state.requests.unshift({platform:document.getElementById('platform').value,fare,distance,area:document.getElementById('areaInput').value||'غير محدد',notes:document.getElementById('notesInput').value,date:new Date().toLocaleString('ar-DZ')});['fareInput','distanceInput','areaInput','notesInput'].forEach(id=>document.getElementById(id).value='');persist()}
+function addTraffic(){const area=document.getElementById('trafficArea').value.trim();if(!area){alert('أدخل اسم المنطقة');return}state.traffic.unshift({area,status:document.getElementById('trafficState').value,date:new Date().toLocaleString('ar-DZ')});document.getElementById('trafficArea').value='';persist()}
+function addExpense(){const amount=Number(document.getElementById('expenseInput').value);if(!(amount>0)){alert('أدخل مبلغاً صحيحاً');return}state.expenses.unshift({amount,type:document.getElementById('expenseType').value||'مصروف',date:new Date().toLocaleString('ar-DZ')});document.getElementById('expenseInput').value='';document.getElementById('expenseType').value='';persist()}
+function render(){const total=state.requests.reduce((a,x)=>a+x.fare,0),cost=state.expenses.reduce((a,x)=>a+x.amount,0);document.getElementById('totalFare').textContent=total.toLocaleString('fr-DZ')+' دج';document.getElementById('totalCost').textContent=cost.toLocaleString('fr-DZ')+' دج';document.getElementById('netTotal').textContent=(total-cost).toLocaleString('fr-DZ')+' دج';document.getElementById('requestCount').textContent=state.requests.length+' طلب';document.getElementById('requestList').innerHTML=state.requests.length?state.requests.map(x=>`<div class="rowline"><span>${esc(x.platform)} · ${esc(x.area)}<br><small class="muted">${esc(x.date)} · ${x.distance||'—'} كم</small></span><b>${x.fare.toLocaleString('fr-DZ')} دج</b></div>`).join(''):'<p class="muted" style="font-size:12px">لا توجد بيانات بعد.</p>';document.getElementById('trafficList').innerHTML=state.traffic.length?state.traffic.map(x=>`<div class="rowline"><span>${esc(x.area)}<br><small class="muted">${esc(x.date)}</small></span><b>${esc(x.status)}</b></div>`).join(''):'<span class="muted" style="font-size:12px">لم تسجل ملاحظات مرورية.</span>'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cirta-radar-data.json';a.click();URL.revokeObjectURL(a.href)}
+function clearData(){if(confirm('هل تريد مسح كل بيانات التجربة من هذا الجهاز؟')){state.requests=[];state.expenses=[];state.traffic=[];persist()}}
+render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
