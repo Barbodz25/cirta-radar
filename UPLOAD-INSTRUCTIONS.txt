@@ -1,0 +1,13 @@
+# CIRTA RADAR — PWA repair files
+
+These files fix the missing install/offline assets referenced by the current `index.html`.
+
+Upload all three files to the repository root (`Barbodz25/cirta-radar`, branch `main`):
+- `manifest.webmanifest`
+- `sw.js`
+- `icon.svg`
+
+Do not replace `index.html` with these files. After upload, reload the Pages site in Safari.
+This only repairs install metadata and app-shell caching. It does NOT implement real phone OTP,
+cloud accounts, Yassir/inDrive integration, live demand, or live traffic; those require backend
+services and authorized integrations.
