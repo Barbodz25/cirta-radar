@@ -1,150 +1,324 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101d2b">
-<meta name="description" content="CIRTA RADAR — مساعد ذكي للسائقين">
-<link rel="manifest" href="manifest.webmanifest">
 <title>CIRTA RADAR</title>
 <style>
-:root{--bg:#0c1622;--panel:#142333;--panel2:#192c40;--line:#294057;--text:#eef5fb;--muted:#9bb0c3;--mint:#5bd6b0;--yellow:#f2c66d;--red:#f07878;--blue:#75b9ef}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#1d3a50 0,transparent 36%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}
-button,input{font:inherit}.app{max-width:520px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(86px + env(safe-area-inset-bottom))}
-header{display:flex;align-items:center;justify-content:space-between;padding:17px 0 12px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#1b4555,#132b3b);display:grid;place-items:center;border:1px solid #386477}.logo svg{width:27px}.brand b{font-size:17px;letter-spacing:1.3px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:1.1px;margin-top:2px}.status{font-size:11px;color:var(--mint);border:1px solid #285c52;background:#15372f;padding:7px 10px;border-radius:20px}
-h1{font-size:22px;margin:16px 0 4px}.sub{color:var(--muted);font-size:12px;line-height:1.7;margin:0 0 16px}.demo{display:inline-flex;gap:6px;align-items:center;background:#47391d;color:#f5d58f;border:1px solid #76602e;border-radius:20px;padding:5px 9px;font-size:10px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:17px;padding:14px;min-width:0}.metric .label{color:var(--muted);font-size:11px}.metric strong{font-size:22px;display:block;margin-top:7px}.metric em{font-style:normal;font-size:10px;color:var(--mint)}
-.section-title{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px}.section-title b{font-size:14px}.section-title span{font-size:10px;color:var(--muted)}
-.map{height:245px;position:relative;overflow:hidden;background:#122638;border:1px solid #2b465c;border-radius:18px}
-.map:before,.map:after{content:"";position:absolute;inset:-30%;background:repeating-linear-gradient(32deg,transparent 0 34px,#38536a 35px 38px,transparent 39px 78px);opacity:.42;transform:rotate(-8deg)}
-.map:after{background:repeating-linear-gradient(118deg,transparent 0 48px,#29465b 49px 52px,transparent 53px 100px);opacity:.55}
-.river{position:absolute;width:130%;height:24px;background:#1b5366;transform:rotate(-24deg);top:47%;right:-15%;z-index:1;border:1px solid #28677a}
-.road{position:absolute;height:5px;background:#8a9a9c;opacity:.6;z-index:2;transform-origin:center}.r1{width:90%;top:42%;right:3%;transform:rotate(16deg)}.r2{width:78%;top:65%;right:10%;transform:rotate(-20deg)}.r3{width:70%;top:24%;right:14%;transform:rotate(-8deg)}
-.zone{position:absolute;z-index:3;border-radius:50%;filter:blur(1px);opacity:.28}.z1{width:90px;height:90px;right:28%;top:24%;background:#5bd6b0;box-shadow:0 0 35px 18px #5bd6b0}.z2{width:75px;height:75px;right:65%;top:57%;background:#f2c66d;box-shadow:0 0 30px 14px #f2c66d}.z3{width:65px;height:65px;right:8%;top:60%;background:#f07878;box-shadow:0 0 28px 12px #f07878}
-.pin{position:absolute;z-index:4;font-size:11px;background:#0b1927;border:1px solid #49677d;padding:5px 8px;border-radius:9px;white-space:nowrap}.p1{top:27%;right:24%}.p2{top:65%;right:57%}.p3{top:68%;right:5%}
-.map-note{position:absolute;bottom:10px;left:10px;z-index:5;background:#0b1927d9;color:#c6d5e2;padding:6px 9px;border-radius:8px;font-size:9px}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:9px;color:var(--muted);font-size:10px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:4px}
-.request{display:flex;align-items:center;gap:10px}.platform{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#20384c;color:var(--mint);font-weight:800}.request .info{flex:1;min-width:0}.request b{font-size:12px}.request small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.fare{font-size:15px;font-weight:700;white-space:nowrap}.muted{color:var(--muted)}
-.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--mint);color:#09221d;font-weight:700;width:100%;cursor:pointer}.btn.secondary{background:#20384c;color:var(--text);border:1px solid #3a566e}.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.panel{display:none}.panel.active{display:block}
-.nav{position:fixed;bottom:0;left:0;right:0;max-width:520px;margin:auto;background:#101e2cf2;backdrop-filter:blur(14px);border-top:1px solid #294057;display:grid;grid-template-columns:repeat(4,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom));z-index:10}
-.nav button{background:none;border:0;color:#8da4b8;font-size:10px;padding:5px 0;display:grid;gap:4px;justify-items:center}.nav button.active{color:var(--mint)}.nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
-.rowline{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #294057;font-size:12px}.rowline:last-child{border:0}
-input{width:100%;background:#0e1b29;border:1px solid #38536a;color:var(--text);border-radius:10px;padding:12px;margin:6px 0 12px}
-label{font-size:11px;color:var(--muted)}.notice{background:#302a1b;border:1px solid #66552e;color:#f2d28c;padding:11px;border-radius:12px;font-size:11px;line-height:1.7;margin-top:12px}
-.footer{font-size:10px;color:#8096a9;text-align:center;margin:20px 0 8px}
+:root{--bg:#101d2b;--card:#182b3f;--line:#27405a;--tx:#eaf2f8;--mut:#8ea6bb;--ac:#f5b335;--ok:#35c486;--bad:#ef5b5b;--mid:#f0a23a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:560px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 16px 96px}
+h1{font-size:1.5rem;margin:.4em 0 .2em}h3{margin:.2em 0 .6em;font-size:1.05rem}
+small,.mut{color:var(--mut)}p{margin:.3em 0 .8em}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.brand{font-weight:800;letter-spacing:.5px}.brand i{display:block;font-style:normal;font-size:.62rem;color:var(--ac);font-weight:600}
+.langs{display:flex;gap:4px}
+.lg{background:none;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:5px 9px;font-size:.8rem}
+.lg.on{background:var(--ac);border-color:var(--ac);color:#101d2b;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid .card{margin:0}
+.grid small{display:block}.grid b{font-size:1.35rem;display:block;margin-top:2px}
+.tag{display:inline-block;font-size:.78rem;color:var(--ac);border:1px solid var(--ac);border-radius:20px;padding:2px 10px;margin:4px 0 10px}
+label{display:block;font-size:.88rem;color:var(--mut);margin:10px 0 4px}
+input,select{width:100%;font:inherit;font-size:16px;color:var(--tx);background:#0f1b29;border:1px solid var(--line);border-radius:10px;padding:12px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.btn{width:100%;margin-top:14px;padding:13px;border:0;border-radius:12px;background:var(--ac);color:#101d2b;font:inherit;font-weight:700;font-size:1rem}
+.btn.alt{background:none;border:1px solid var(--line);color:var(--tx)}.btn:disabled{opacity:.5}
+.err{color:var(--bad);font-size:.9rem;min-height:1.4em;margin-top:8px}
+.row{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}.row.good{border-inline-start:3px solid var(--ok);padding-inline-start:8px}
+.row.ok{border-inline-start:3px solid var(--mid);padding-inline-start:8px}.row.low{border-inline-start:3px solid var(--bad);padding-inline-start:8px}
+.ac{display:flex;gap:6px;align-items:flex-start}
+.sm{background:none;border:1px solid var(--line);color:var(--tx);border-radius:8px;padding:5px 9px;font:inherit;font-size:.82rem}
+.sm.on{background:var(--ok);border-color:var(--ok);color:#06251a}.sm.x{color:var(--bad)}
+.prev{border-radius:10px;padding:10px;margin-top:12px;background:#0f1b29;border:1px solid var(--line)}
+.prev.good{border-color:var(--ok)}.prev.ok{border-color:var(--mid)}.prev.low{border-color:var(--bad)}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line)}.kv:first-of-type{border-top:0}
+.big{font-size:1.6rem;font-weight:800}
+nav{position:fixed;bottom:0;inset-inline:0;display:flex;background:#0c1622;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;color:var(--mut);padding:13px 2px;font:inherit;font-size:.82rem}
+nav button.on{color:var(--ac);font-weight:700}
+#splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
+.logo{width:64px;height:64px;border-radius:18px;background:var(--ac);color:#101d2b;font-weight:900;font-size:1.5rem;display:flex;align-items:center;justify-content:center;margin:auto}
+#map{width:100%;height:auto;background:#0f1b29;border-radius:10px}
+.chip{display:inline-block;border:1px dashed var(--mut);border-radius:20px;padding:2px 10px;font-size:.8rem;margin:4px 4px 0 0;color:var(--mut)}
 </style>
 </head>
 <body>
-<div class="app">
-<header>
- <div class="brand">
-  <div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="#65dfbd" stroke-width="1.5"><circle cx="16" cy="16" r="13"/><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="3"/><path d="M16 16 27 6"/></svg></div>
-  <div><b>CIRTA RADAR</b><small>SMART DRIVER INTELLIGENCE</small></div>
- </div>
- <div class="status">● الوضع الذكي</div>
-</header>
+<div id="splash"><div><div class="logo">CR</div><p class="mut" id="sp">…</p></div></div>
 
-<main id="dashboard" class="panel active">
- <h1>مرحباً بك في Cirta Radar</h1>
- <p class="sub">لوحة قيادة موحدة لمتابعة نشاطك وتحسين قرارات الرحلات.</p>
- <div class="demo">● بيانات تجريبية — ليست طلبات حية</div>
- <div class="grid">
-  <div class="card metric"><div class="label">صافي الربح اليوم</div><strong>— دج</strong><em>يظهر بعد تسجيل الرحلات</em></div>
-  <div class="card metric"><div class="label">الرحلات المسجلة</div><strong>0</strong><em>بانتظار بياناتك</em></div>
-  <div class="card metric"><div class="label">وقت العمل</div><strong>0 س</strong><span class="muted" style="font-size:10px">يُحسب من سجل الجلسات</span></div>
-  <div class="card metric"><div class="label">تكلفة الكيلومتر</div><strong>— دج</strong><span class="muted" style="font-size:10px">تحتاج قياس استهلاك السيارة</span></div>
- </div>
- <div class="section-title"><b>خريطة قسنطينة التجريبية</b><span>عرض توضيحي فقط</span></div>
- <div class="map">
-  <div class="river"></div><div class="road r1"></div><div class="road r2"></div><div class="road r3"></div>
-  <div class="zone z1"></div><div class="zone z2"></div><div class="zone z3"></div>
-  <div class="pin p1">وسط المدينة</div><div class="pin p2">زواغي</div><div class="pin p3">الخروب</div>
-  <div class="map-note">خريطة شكلية وليست خريطة ملاحة</div>
- </div>
- <div class="legend"><span><i class="dot" style="background:var(--mint)"></i>منطقة اختبار</span><span><i class="dot" style="background:var(--yellow)"></i>غير مؤكدة</span><span><i class="dot" style="background:var(--red)"></i>بيانات غير متاحة</span></div>
- <div class="section-title"><b>رادار الطلبات</b><span>التسجيل اليدوي في هذه النسخة</span></div>
- <div class="card">
-  <div class="request"><div class="platform">CR</div><div class="info"><b>لا توجد طلبات مسجلة</b><small>عند وصول طلب، سجّله لتحليل أدائه.</small></div><div class="fare">—</div></div>
-  <div class="btnrow"><button class="btn" onclick="show('requests')">تسجيل طلب</button><button class="btn secondary" onclick="show('traffic')">حالة الطرق</button></div>
- </div>
+<main id="auth" class="wrap" hidden>
+  <div class="top"><div class="brand">CIRTA RADAR<i>SMART DRIVER INTELLIGENCE</i></div>
+    <div class="langs"><button class="lg" data-l="ar">AR</button><button class="lg" data-l="fr">FR</button><button class="lg" data-l="en">EN</button></div></div>
+  <div class="card">
+    <h1 data-i="login"></h1><p class="mut" data-i="login_d"></p>
+    <div id="s1">
+      <label for="phone" data-i="phone"></label>
+      <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0555 12 34 56 / +213…" dir="ltr">
+      <button class="btn" id="sendBtn" data-i="send"></button>
+    </div>
+    <div id="s2" hidden>
+      <p class="mut"><span data-i="sent"></span> <b id="sentTo" dir="ltr"></b></p>
+      <label for="otp" data-i="code"></label>
+      <input id="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••" dir="ltr">
+      <button class="btn" id="verBtn" data-i="verify"></button>
+      <button class="btn alt" id="backBtn" data-i="change"></button>
+    </div>
+    <div class="err" id="authErr" role="alert"></div>
+    <div id="rcw"><div id="rc"></div></div>
+  </div>
 </main>
 
-<section id="requests" class="panel">
- <h1>رادار الطلبات</h1><p class="sub">سجّل المعلومات التي تظهر لك في تطبيق منصة النقل. لا يوجد اتصال حي بالمنصات في هذا النموذج.</p>
- <div class="card">
-  <label>المنصة</label><select id="platform" style="width:100%;background:#0e1b29;color:white;border:1px solid #38536a;border-radius:10px;padding:12px;margin:6px 0 12px"><option>Yassir</option><option>inDrive</option></select>
-  <label>الأجرة المعروضة (دج)</label><input id="fareInput" type="number" min="0" placeholder="مثال: 450">
-  <label>المسافة الإجمالية المقدرة (كم)</label><input id="distanceInput" type="number" min="0" step="0.1" placeholder="مثال: 5.2">
-  <label>منطقة الانطلاق</label><input id="areaInput" placeholder="مثال: وسط المدينة">
-  <label>ملاحظات (اختياري)</label><input id="notesInput" placeholder="ازدحام، وقت انتظار...">
-  <button class="btn" onclick="addRequest()">حفظ الطلب</button>
- </div>
- <div class="section-title"><b>سجل الطلبات</b><span id="requestCount">0 طلب</span></div><div id="requestList" class="card"><p class="muted" style="font-size:12px">لا توجد بيانات بعد.</p></div>
-</section>
+<div id="app" hidden>
+<div class="wrap">
+  <div class="top"><div class="brand">CIRTA RADAR<i>SMART DRIVER INTELLIGENCE</i></div>
+    <div class="langs"><button class="lg" data-l="ar">AR</button><button class="lg" data-l="fr">FR</button><button class="lg" data-l="en">EN</button></div></div>
 
-<section id="traffic" class="panel">
- <h1>حالة الطرق</h1><p class="sub">في النسخة الحالية لا يوجد مصدر مرور مباشر متصل. يمكنك تسجيل ملاحظاتك الميدانية.</p>
- <div class="card">
-  <label>المنطقة</label><input id="trafficArea" placeholder="اسم المنطقة">
-  <label>حالة الطريق</label><select id="trafficState" style="width:100%;background:#0e1b29;color:white;border:1px solid #38536a;border-radius:10px;padding:12px;margin:6px 0 12px"><option>سلس</option><option>متوسط</option><option>مزدحم</option><option>حادث أو إغلاق</option></select>
-  <button class="btn" onclick="addTraffic()">حفظ الملاحظة</button>
- </div>
- <div id="trafficList" class="card" style="margin-top:12px"><span class="muted" style="font-size:12px">لم تسجل ملاحظات مرورية.</span></div>
- <div class="notice">الربط المباشر بمصادر المرور مثل مزودي الخرائط يحتاج إلى مفتاح API وشروط استخدام مناسبة للجزائر. لن نعرض بيانات مرور حية قبل توفير المصدر.</div>
-</section>
+  <section class="view" id="v-home">
+    <h1 data-i="hello"></h1><p class="mut" data-i="lede"></p><span class="tag" data-i="demo"></span>
+    <div class="grid">
+      <div class="card"><small data-i="k_net"></small><b id="kNet">—</b></div>
+      <div class="card"><small data-i="k_rides"></small><b id="kRides">0</b></div>
+      <div class="card"><small data-i="k_time"></small><b id="kTime">0</b></div>
+      <div class="card"><small data-i="k_cpk"></small><b id="kCpk">—</b></div>
+    </div>
+    <button class="btn" id="workBtn"></button>
+    <div class="card"><h3 data-i="map"></h3>
+      <svg id="map" viewBox="0 0 300 150" aria-hidden="true">
+        <circle cx="150" cy="70" r="26" fill="#f0a23a" opacity=".35"/><circle cx="70" cy="95" r="20" fill="#8ea6bb" opacity=".35"/><circle cx="235" cy="100" r="22" fill="#8ea6bb" opacity=".35"/>
+        <g fill="#eaf2f8" font-size="11" text-anchor="middle"><text id="z0" x="150" y="74"></text><text id="z1" x="70" y="99"></text><text id="z2" x="235" y="104"></text></g>
+      </svg>
+      <small data-i="mapd"></small><div><span class="chip" data-i="test"></span></div>
+    </div>
+    <div class="card"><h3 data-i="hist"></h3><div id="homeLog"></div></div>
+  </section>
 
-<section id="earnings" class="panel">
- <h1>الأرباح والتكاليف</h1><p class="sub">ابدأ بتسجيل الرحلات والمصاريف للحصول على حساب واقعي لصافي الربح.</p>
- <div class="grid">
-  <div class="card metric"><div class="label">إجمالي الأجرة المسجلة</div><strong id="totalFare">0 دج</strong></div>
-  <div class="card metric"><div class="label">المصاريف المسجلة</div><strong id="totalCost">0 دج</strong></div>
- </div>
- <div class="card" style="margin-top:10px">
-  <label>إضافة مصروف (دج)</label><input id="expenseInput" type="number" min="0" placeholder="مثال: وقود أو صيانة">
-  <label>نوع المصروف</label><input id="expenseType" placeholder="GPL، صيانة، عمولة...">
-  <button class="btn" onclick="addExpense()">إضافة المصروف</button>
-  <div class="rowline"><span>صافي أولي مسجل</span><b id="netTotal">0 دج</b></div>
- </div>
- <div class="notice">الحساب الأولي لا يشمل تلقائياً عمولات المنصات أو استهلاك السيارة أو تكاليف لم تسجلها. أضف جميع المصاريف للحصول على نتيجة أقرب للواقع.</div>
-</section>
+  <section class="view" id="v-req" hidden>
+    <h1 data-i="req"></h1><p class="mut" data-i="req_d"></p>
+    <div class="card">
+      <form id="offerForm">
+        <label data-i="plat"></label><select id="plat"><option>Yassir</option><option>inDrive</option></select>
+        <label data-i="fare"></label><input id="fare" type="number" inputmode="decimal" min="0" step="any" required>
+        <label data-i="km"></label><input id="km" type="number" inputmode="decimal" min="0" step="any" required>
+        <label data-i="zone"></label><select id="zone"></select>
+        <label data-i="note"></label><input id="note" maxlength="200">
+        <div class="prev" id="prev" hidden></div>
+        <button class="btn" type="submit" data-i="save"></button>
+      </form>
+    </div>
+    <div class="card"><h3><span data-i="hist"></span> · <small id="cnt"></small></h3><div id="offers"></div></div>
 
-<section id="settings" class="panel">
- <h1>الإعدادات</h1><p class="sub">إعدادات النسخة التجريبية على جهازك.</p>
- <div class="card">
-  <div class="rowline"><span>وضع التشغيل</span><b style="color:var(--mint)">ذكي</b></div>
-  <div class="rowline"><span>المنطقة التجريبية</span><b>قسنطينة</b></div>
-  <div class="rowline"><span>السيارة</span><b>Hyundai i10 · 2009 · GPL</b></div>
-  <div class="rowline"><span>الربط مع Yassir / inDrive</span><b style="color:var(--yellow)">غير متصل</b></div>
-  <div class="rowline"><span>الحساب السحابي</span><b>غير مفعّل</b></div>
- </div>
- <div class="notice">هذه نسخة واجهة أولية محلية. البيانات تحفظ على هذا المتصفح فقط ولا تنتقل تلقائياً إلى هاتف آخر.</div>
- <button class="btn secondary" style="margin-top:12px" onclick="exportData()">تصدير بياناتي بصيغة JSON</button>
- <button class="btn secondary" style="margin-top:8px" onclick="clearData()">مسح بيانات التجربة</button>
-</section>
+    <h1 data-i="road"></h1><p class="mut" data-i="road_d"></p>
+    <div class="card">
+      <form id="roadForm">
+        <label data-i="zone"></label><select id="rzone"></select>
+        <label data-i="st"></label><select id="rst"></select>
+        <button class="btn" type="submit" data-i="save"></button>
+      </form>
+    </div>
+    <div class="card"><div id="roads"></div><small data-i="road_n"></small></div>
+  </section>
 
-<div class="footer">CIRTA RADAR · Prototype v0.1 · بياناتك محلية على هذا الجهاز</div>
-</main>
+  <section class="view" id="v-earn" hidden>
+    <h1 data-i="earn"></h1><p class="mut" data-i="earn_d"></p>
+    <div class="grid">
+      <div class="card"><small data-i="tf"></small><b id="tF">0</b></div>
+      <div class="card"><small data-i="te"></small><b id="tE">0</b></div>
+    </div>
+    <div class="card">
+      <form id="expForm">
+        <label data-i="ae"></label><input id="eamt" type="number" inputmode="decimal" min="0" step="any" required>
+        <label data-i="et"></label><select id="etype"></select>
+        <button class="btn" type="submit" data-i="add"></button>
+      </form>
+    </div>
+    <div class="card"><div id="exps"></div></div>
+    <div class="card"><small data-i="np"></small><div class="big" id="tN">0</div><small data-i="np_n"></small></div>
+  </section>
 
-<nav class="nav">
- <button class="active" data-tab="dashboard" onclick="show('dashboard',this)"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/></svg>الرئيسية</button>
- <button data-tab="requests" onclick="show('requests',this)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5M11 7v8M7 11h8"/></svg>الطلبات</button>
- <button data-tab="earnings" onclick="show('earnings',this)"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h4"/></svg>الأرباح</button>
- <button data-tab="settings" onclick="show('settings',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 2.9-.2-.1a1.7 1.7 0 0 0-1.8.1l-.2.1h-3.4l-.1-.2a1.7 1.7 0 0 0-1.6-1l-.2.1-3-1.7.1-.2a1.7 1.7 0 0 0-.1-1.8l-.1-.2v-3.4l.2-.1a1.7 1.7 0 0 0 1-1.6l-.1-.2 1.7-3 .2.1a1.7 1.7 0 0 0 1.8-.1l.2-.1h3.4l.1.2a1.7 1.7 0 0 0 1.6 1l.2-.1 3 1.7-.1.2a1.7 1.7 0 0 0 .1 1.8l.1.2v3.4z"/></svg>الإعدادات</button>
+  <section class="view" id="v-set" hidden>
+    <h1 data-i="set"></h1><p class="mut" data-i="set_d"></p>
+    <div class="card">
+      <div class="kv"><span data-i="mode"></span><b data-i="modev"></b></div>
+      <div class="kv"><span data-i="area"></span><b data-i="areav"></b></div>
+      <div class="kv"><span data-i="car"></span><b dir="ltr">Hyundai i10 · 2009 · GPL</b></div>
+      <div class="kv"><span data-i="acct"></span><b dir="ltr" id="acct"></b></div>
+      <div class="kv"><span data-i="link"></span><b data-i="linkv"></b></div>
+      <small data-i="link_n"></small>
+    </div>
+    <div class="card">
+      <label data-i="cpk"></label><input id="s_cpk" type="number" inputmode="decimal" min="0" step="any">
+      <label data-i="comm"></label><input id="s_comm" type="number" inputmode="decimal" min="0" max="100" step="any">
+      <label data-i="tgt"></label><input id="s_tgt" type="number" inputmode="decimal" min="0" step="any">
+      <small data-i="loc_n"></small>
+    </div>
+    <button class="btn alt" id="expBtn" data-i="exp"></button>
+    <button class="btn alt" id="clrBtn" data-i="clr"></button>
+    <button class="btn" id="outBtn" data-i="logout"></button>
+    <p class="mut" style="text-align:center;margin-top:18px"><small data-i="foot"></small></p>
+  </section>
+</div>
+<nav>
+  <button data-v="home" class="on" data-i="n_home"></button><button data-v="req" data-i="n_req"></button>
+  <button data-v="earn" data-i="n_earn"></button><button data-v="set" data-i="n_set"></button>
 </nav>
 </div>
-<script>
-const state={requests:JSON.parse(localStorage.getItem('cr_requests')||'[]'),expenses:JSON.parse(localStorage.getItem('cr_expenses')||'[]'),traffic:JSON.parse(localStorage.getItem('cr_traffic')||'[]')};
-function persist(){localStorage.setItem('cr_requests',JSON.stringify(state.requests));localStorage.setItem('cr_expenses',JSON.stringify(state.expenses));localStorage.setItem('cr_traffic',JSON.stringify(state.traffic));render()}
-function show(id,btn){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));const b=btn||document.querySelector(`[data-tab="${id}"]`);if(b)b.classList.add('active');window.scrollTo(0,0)}
-function addRequest(){const fare=Number(document.getElementById('fareInput').value),distance=Number(document.getElementById('distanceInput').value);if(!(fare>0)){alert('أدخل أجرة صحيحة');return}state.requests.unshift({platform:document.getElementById('platform').value,fare,distance,area:document.getElementById('areaInput').value||'غير محدد',notes:document.getElementById('notesInput').value,date:new Date().toLocaleString('ar-DZ')});['fareInput','distanceInput','areaInput','notesInput'].forEach(id=>document.getElementById(id).value='');persist()}
-function addTraffic(){const area=document.getElementById('trafficArea').value.trim();if(!area){alert('أدخل اسم المنطقة');return}state.traffic.unshift({area,status:document.getElementById('trafficState').value,date:new Date().toLocaleString('ar-DZ')});document.getElementById('trafficArea').value='';persist()}
-function addExpense(){const amount=Number(document.getElementById('expenseInput').value);if(!(amount>0)){alert('أدخل مبلغاً صحيحاً');return}state.expenses.unshift({amount,type:document.getElementById('expenseType').value||'مصروف',date:new Date().toLocaleString('ar-DZ')});document.getElementById('expenseInput').value='';document.getElementById('expenseType').value='';persist()}
-function render(){const total=state.requests.reduce((a,x)=>a+x.fare,0),cost=state.expenses.reduce((a,x)=>a+x.amount,0);document.getElementById('totalFare').textContent=total.toLocaleString('fr-DZ')+' دج';document.getElementById('totalCost').textContent=cost.toLocaleString('fr-DZ')+' دج';document.getElementById('netTotal').textContent=(total-cost).toLocaleString('fr-DZ')+' دج';document.getElementById('requestCount').textContent=state.requests.length+' طلب';document.getElementById('requestList').innerHTML=state.requests.length?state.requests.map(x=>`<div class="rowline"><span>${esc(x.platform)} · ${esc(x.area)}<br><small class="muted">${esc(x.date)} · ${x.distance||'—'} كم</small></span><b>${x.fare.toLocaleString('fr-DZ')} دج</b></div>`).join(''):'<p class="muted" style="font-size:12px">لا توجد بيانات بعد.</p>';document.getElementById('trafficList').innerHTML=state.traffic.length?state.traffic.map(x=>`<div class="rowline"><span>${esc(x.area)}<br><small class="muted">${esc(x.date)}</small></span><b>${esc(x.status)}</b></div>`).join(''):'<span class="muted" style="font-size:12px">لم تسجل ملاحظات مرورية.</span>'}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cirta-radar-data.json';a.click();URL.revokeObjectURL(a.href)}
-function clearData(){if(confirm('هل تريد مسح كل بيانات التجربة من هذا الجهاز؟')){state.requests=[];state.expenses=[];state.traffic=[];persist()}}
-render();
-if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+<script>setTimeout(function(){if(!window.__ok){var s=document.getElementById('sp');if(s)s.textContent='تعذر التحميل · Chargement impossible · Load failed — check connection / Safari'}},9000)</script>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,RecaptchaVerifier,signInWithPhoneNumber,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig={apiKey:"AIzaSyDFJwodSLGmcDjAkgnxH79sP415NQzvtLE",authDomain:"cirta-radar.firebaseapp.com",projectId:"cirta-radar",storageBucket:"cirta-radar.firebasestorage.app",messagingSenderId:"178972880246",appId:"1:178972880246:web:4a368a1f0aeb26ae8dde57",measurementId:"G-JCHT71EB1V"};
+const auth=getAuth(initializeApp(firebaseConfig));
+
+const T={
+en:{login:'Sign in',login_d:'Enter your phone number to receive a verification code by SMS.',phone:'Phone number',send:'Send code',sent:'Code sent to',code:'Verification code',verify:'Verify',change:'Change number',logout:'Log out',n_home:'Home',n_req:'Requests',n_earn:'Earnings',n_set:'Settings',hello:'Welcome to Cirta Radar',lede:'One dashboard to track your activity and improve your trip decisions.',demo:'● Demo data — not live requests',k_net:'Net profit today',k_rides:'Accepted rides',k_time:'Work time',k_cpk:'Cost per km',da:'DA',h:'h',ws:'Start work session',we:'End work session',map:'Constantine demo map',mapd:'Illustration only, not a navigation map.',test:'Test area · unconfirmed',req:'Request radar',req_d:'Log what you see in the ride app. There is no live link to the platforms in this version.',plat:'Platform',fare:'Offered fare (DA)',km:'Total estimated distance (km)',zone:'Pickup zone',note:'Notes (optional)',save:'Save',hist:'Request log',req_u:'requests',empty:'No data yet.',acc:'Accept',accd:'Accepted',v_good:'Good offer',v_ok:'Acceptable offer',v_low:'Low offer',v_nocost:'Set your cost per km in Settings for a full analysis.',gpk:'DA/km (gross)',net:'Net',road:'Road status',road_d:'No live traffic source is connected. Log your field notes.',st:'Road condition',s0:'Smooth',s1:'Medium',s2:'Congested',s3:'Accident or closure',road_none:'No traffic notes yet.',road_n:'Live traffic needs a map provider API key and suitable terms for Algeria. None is shown until a source exists.',earn:'Earnings & costs',earn_d:'Log accepted rides and expenses for a realistic net profit.',tf:'Accepted fares',te:'Expenses',ae:'Add expense (DA)',et:'Expense type',e0:'Fuel / GPL',e1:'Maintenance',e2:'Other',add:'Add expense',np:'Preliminary net',np_n:'Based only on what you logged (after platform commission if set). Add all expenses for a result closer to reality.',set:'Settings',set_d:'Settings for this trial version.',mode:'Mode',modev:'Smart',area:'Trial area',areav:'Constantine',car:'Car',acct:'Account',link:'Yassir / inDrive link',linkv:'Not connected',link_n:'Automatic link only if Yassir or inDrive provide official APIs or authorized integrations. None is available today.',cpk:'Cost per km (DA)',comm:'Platform commission (%)',tgt:'Target net per km (DA, empty = cost per km)',loc_n:'Your data is stored on this device only, per account. It does not sync to another phone yet.',exp:'Export my data (JSON)',clr:'Clear trial data',cfm:'Delete all trial data of this account?',foot:'CIRTA RADAR · Prototype v0.3',e_phone:'Invalid phone number.',e_many:'Too many attempts. Try again later.',e_code:'Wrong code. Check and retry.',e_exp:'Code expired. Request a new one.',e_quota:'SMS limit reached. Try later.',e_region:'SMS to this country is not enabled in Firebase yet.',e_net:'Network error. Check your connection.',e_dom:'This domain is not authorized in Firebase.',e_cap:'reCAPTCHA failed. Reload the page and retry.',e_gen:'Error',e_empty:'Enter the 6-digit code.'},
+fr:{login:'Connexion',login_d:'Entrez votre numéro pour recevoir un code de vérification par SMS.',phone:'Numéro de téléphone',send:'Envoyer le code',sent:'Code envoyé au',code:'Code de vérification',verify:'Valider',change:'Changer de numéro',logout:'Se déconnecter',n_home:'Accueil',n_req:'Demandes',n_earn:'Revenus',n_set:'Réglages',hello:'Bienvenue sur Cirta Radar',lede:'Un tableau de bord pour suivre votre activité et mieux choisir vos courses.',demo:'● Données de démonstration — pas de demandes réelles',k_net:'Bénéfice net du jour',k_rides:'Courses acceptées',k_time:'Temps de travail',k_cpk:'Coût par km',da:'DA',h:'h',ws:'Démarrer la session',we:'Terminer la session',map:'Carte démo de Constantine',mapd:'Illustration seulement, pas une carte de navigation.',test:'Zone de test · non confirmée',req:'Radar de demandes',req_d:'Notez ce que vous voyez dans l’app de transport. Aucun lien direct avec les plateformes dans cette version.',plat:'Plateforme',fare:'Tarif proposé (DA)',km:'Distance totale estimée (km)',zone:'Zone de départ',note:'Notes (facultatif)',save:'Enregistrer',hist:'Historique des demandes',req_u:'demandes',empty:'Aucune donnée.',acc:'Accepter',accd:'Acceptée',v_good:'Bonne offre',v_ok:'Offre acceptable',v_low:'Offre faible',v_nocost:'Renseignez votre coût par km dans Réglages pour une analyse complète.',gpk:'DA/km (brut)',net:'Net',road:'État des routes',road_d:'Aucune source de trafic en direct. Notez vos observations.',st:'État de la route',s0:'Fluide',s1:'Moyen',s2:'Embouteillé',s3:'Accident ou fermeture',road_none:'Aucune note de trafic.',road_n:'Le trafic en direct nécessite une clé API d’un fournisseur de cartes et des conditions adaptées à l’Algérie. Rien n’est affiché sans source.',earn:'Revenus et coûts',earn_d:'Enregistrez courses acceptées et dépenses pour un bénéfice net réaliste.',tf:'Tarifs acceptés',te:'Dépenses',ae:'Ajouter une dépense (DA)',et:'Type de dépense',e0:'Carburant / GPL',e1:'Entretien',e2:'Autre',add:'Ajouter',np:'Net préliminaire',np_n:'Basé uniquement sur vos saisies (après commission si renseignée). Ajoutez toutes les dépenses pour un résultat réaliste.',set:'Réglages',set_d:'Réglages de la version d’essai.',mode:'Mode',modev:'Intelligent',area:'Zone d’essai',areav:'Constantine',car:'Voiture',acct:'Compte',link:'Lien Yassir / inDrive',linkv:'Non connecté',link_n:'Lien automatique seulement si Yassir ou inDrive fournissent des API officielles ou intégrations autorisées. Aucune n’est disponible aujourd’hui.',cpk:'Coût par km (DA)',comm:'Commission plateforme (%)',tgt:'Net visé par km (DA, vide = coût par km)',loc_n:'Vos données sont stockées sur cet appareil uniquement, par compte. Pas encore de synchronisation entre téléphones.',exp:'Exporter mes données (JSON)',clr:'Effacer les données d’essai',cfm:'Supprimer toutes les données d’essai de ce compte ?',foot:'CIRTA RADAR · Prototype v0.3',e_phone:'Numéro invalide.',e_many:'Trop de tentatives. Réessayez plus tard.',e_code:'Code incorrect.',e_exp:'Code expiré. Demandez-en un nouveau.',e_quota:'Limite de SMS atteinte. Réessayez plus tard.',e_region:'Les SMS vers ce pays ne sont pas encore activés dans Firebase.',e_net:'Erreur réseau. Vérifiez la connexion.',e_dom:'Ce domaine n’est pas autorisé dans Firebase.',e_cap:'reCAPTCHA échoué. Rechargez la page.',e_gen:'Erreur',e_empty:'Entrez le code à 6 chiffres.'},
+ar:{login:'تسجيل الدخول',login_d:'أدخل رقم هاتفك لتصلك رسالة SMS برمز التحقق.',phone:'رقم الهاتف',send:'إرسال الرمز',sent:'تم إرسال الرمز إلى',code:'رمز التحقق',verify:'تأكيد',change:'تغيير الرقم',logout:'تسجيل الخروج',n_home:'الرئيسية',n_req:'الطلبات',n_earn:'الأرباح',n_set:'الإعدادات',hello:'مرحباً بك في Cirta Radar',lede:'لوحة قيادة موحدة لمتابعة نشاطك وتحسين قرارات الرحلات.',demo:'● بيانات تجريبية — ليست طلبات حية',k_net:'صافي الربح اليوم',k_rides:'الرحلات المقبولة',k_time:'وقت العمل',k_cpk:'تكلفة الكيلومتر',da:'دج',h:'س',ws:'بدء جلسة العمل',we:'إنهاء جلسة العمل',map:'خريطة قسنطينة التجريبية',mapd:'عرض توضيحي فقط وليست خريطة ملاحة.',test:'منطقة اختبار · غير مؤكدة',req:'رادار الطلبات',req_d:'سجّل ما يظهر لك في تطبيق النقل. لا يوجد اتصال حي بالمنصات في هذه النسخة.',plat:'المنصة',fare:'الأجرة المعروضة (دج)',km:'المسافة الإجمالية المقدرة (كم)',zone:'منطقة الانطلاق',note:'ملاحظات (اختياري)',save:'حفظ',hist:'سجل الطلبات',req_u:'طلب',empty:'لا توجد بيانات بعد.',acc:'قبول',accd:'مقبول',v_good:'عرض جيد',v_ok:'عرض مقبول',v_low:'عرض ضعيف',v_nocost:'أدخل تكلفة الكيلومتر في الإعدادات للحصول على تحليل كامل.',gpk:'دج/كم (إجمالي)',net:'الصافي',road:'حالة الطرق',road_d:'لا يوجد مصدر مرور مباشر. سجّل ملاحظاتك الميدانية.',st:'حالة الطريق',s0:'سلس',s1:'متوسط',s2:'مزدحم',s3:'حادث أو إغلاق',road_none:'لم تسجل ملاحظات مرورية.',road_n:'عرض المرور المباشر يحتاج مفتاح API من مزود خرائط وشروط استخدام مناسبة للجزائر. لن تُعرض بيانات حية قبل توفر المصدر.',earn:'الأرباح والتكاليف',earn_d:'سجّل الرحلات المقبولة والمصاريف للحصول على صافي ربح واقعي.',tf:'الأجرة المقبولة',te:'المصاريف',ae:'إضافة مصروف (دج)',et:'نوع المصروف',e0:'وقود / GPL',e1:'صيانة',e2:'أخرى',add:'إضافة المصروف',np:'صافي أولي',np_n:'محسوب مما سجلته فقط (بعد عمولة المنصة إن حددتها). أضف كل المصاريف لنتيجة أقرب للواقع.',set:'الإعدادات',set_d:'إعدادات النسخة التجريبية.',mode:'وضع التشغيل',modev:'ذكي',area:'المنطقة التجريبية',areav:'قسنطينة',car:'السيارة',acct:'الحساب',link:'الربط مع Yassir / inDrive',linkv:'غير متصل',link_n:'الربط التلقائي ممكن فقط إذا وفّرت Yassir أو inDrive واجهات API رسمية أو تكاملات مصرح بها. غير متاح حالياً.',cpk:'تكلفة الكيلومتر (دج)',comm:'عمولة المنصة (%)',tgt:'الصافي المستهدف لكل كم (دج، فارغ = تكلفة الكم)',loc_n:'بياناتك محفوظة على هذا الجهاز فقط لكل حساب، ولا تنتقل بعد إلى هاتف آخر.',exp:'تصدير بياناتي (JSON)',clr:'مسح بيانات التجربة',cfm:'حذف كل بيانات التجربة لهذا الحساب؟',foot:'CIRTA RADAR · Prototype v0.3',e_phone:'رقم الهاتف غير صالح.',e_many:'محاولات كثيرة. حاول لاحقاً.',e_code:'الرمز غير صحيح.',e_exp:'انتهت صلاحية الرمز. اطلب رمزاً جديداً.',e_quota:'تم بلوغ حد الرسائل. حاول لاحقاً.',e_region:'الرسائل إلى هذا البلد غير مفعّلة بعد في Firebase.',e_net:'خطأ في الشبكة. تحقق من الاتصال.',e_dom:'هذا النطاق غير مصرح به في Firebase.',e_cap:'فشل reCAPTCHA. أعد تحميل الصفحة.',e_gen:'خطأ',e_empty:'أدخل الرمز المكوّن من 6 أرقام.'}};
+const ZONES=[{ar:'وسط المدينة',fr:'Centre-ville',en:'City center'},{ar:'زواغي',fr:'Zouaghi',en:'Zouaghi'},{ar:'الخروب',fr:'El Khroub',en:'El Khroub'}];
+const ERR={'auth/invalid-phone-number':'e_phone','auth/missing-phone-number':'e_phone','auth/too-many-requests':'e_many','auth/invalid-verification-code':'e_code','auth/code-expired':'e_exp','auth/quota-exceeded':'e_quota','auth/operation-not-allowed':'e_region','auth/network-request-failed':'e_net','auth/unauthorized-domain':'e_dom','auth/captcha-check-failed':'e_cap'};
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let lang='ar';try{lang=localStorage.getItem('cirta:lang')||'ar'}catch(e){}if(!T[lang])lang='ar';
+const t=k=>T[lang][k]??T.en[k]??k;
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const cur=()=>t('da');
+const zn=i=>(ZONES[i]||ZONES[0])[lang];
+let user=null,D=null,conf=null,rv=null,view='home';
+
+function fillSel(id,items){const s=$(id),v=s.value;s.innerHTML=items.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');if(v)s.value=v}
+function applyLang(){
+  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+  document.querySelectorAll('.lg').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
+  fillSel('zone',ZONES.map(z=>z[lang]));fillSel('rzone',ZONES.map(z=>z[lang]));
+  fillSel('rst',[t('s0'),t('s1'),t('s2'),t('s3')]);fillSel('etype',[t('e0'),t('e1'),t('e2')]);
+  ZONES.forEach((z,i)=>$('z'+i).textContent=z[lang]);
+  auth.languageCode=lang;
+  if(user)render();
+}
+document.querySelectorAll('.lg').forEach(b=>b.onclick=()=>{lang=b.dataset.l;try{localStorage.setItem('cirta:lang',lang)}catch(e){}applyLang()});
+
+/* ---------- Auth ---------- */
+function normPhone(v){
+  let s=v.replace(/[\s\-().]/g,'');
+  if(s.startsWith('00'))s='+'+s.slice(2);
+  else if(s.startsWith('0'))s='+213'+s.slice(1);
+  else if(!s.startsWith('+')&&/^\d{9}$/.test(s))s='+213'+s;
+  return /^\+\d{8,15}$/.test(s)?s:null;
+}
+function showErr(e){const k=ERR[e&&e.code];$('authErr').textContent=k?t(k):t('e_gen')+(e&&e.code?': '+e.code:'')}
+function resetRv(){try{rv&&rv.clear()}catch(e){}rv=null;$('rcw').innerHTML='<div id="rc"></div>'}
+function busy(b){$('sendBtn').disabled=b;$('verBtn').disabled=b}
+$('sendBtn').onclick=async()=>{
+  $('authErr').textContent='';
+  const ph=normPhone($('phone').value);
+  if(!ph){$('authErr').textContent=t('e_phone');return}
+  busy(true);
+  try{
+    if(!rv)rv=new RecaptchaVerifier(auth,'rc',{size:'invisible'});
+    conf=await signInWithPhoneNumber(auth,ph,rv);
+    $('sentTo').textContent=ph;$('s1').hidden=true;$('s2').hidden=false;$('otp').focus();
+  }catch(e){showErr(e);resetRv()}
+  busy(false);
+};
+$('verBtn').onclick=async()=>{
+  $('authErr').textContent='';
+  const c=$('otp').value.trim();
+  if(!/^\d{6}$/.test(c)){$('authErr').textContent=t('e_empty');return}
+  busy(true);
+  try{await conf.confirm(c)}catch(e){showErr(e)}
+  busy(false);
+};
+$('backBtn').onclick=()=>{$('s2').hidden=true;$('s1').hidden=false;$('otp').value='';$('authErr').textContent='';conf=null;resetRv()};
+$('outBtn').onclick=()=>signOut(auth);
+
+/* ---------- Data ---------- */
+const KEY=()=>'cirta:'+user.uid;
+function load(){try{D=JSON.parse(localStorage.getItem(KEY()))||{}}catch(e){D={}}
+  D.offers=D.offers||[];D.exp=D.exp||[];D.roads=D.roads||[];D.sess=D.sess||[];D.set=D.set||{}}
+function save(){try{localStorage.setItem(KEY(),JSON.stringify(D))}catch(e){}}
+const today=ts=>new Date(ts).toDateString()===new Date().toDateString();
+function calc(fare,km){
+  const c=+D.set.cpk||0,m=+D.set.comm||0,tg=+D.set.tgt||c;
+  const net=fare*(1-m/100)-km*c,npk=km>0?net/km:0;
+  let v='nocost';if(tg>0)v=npk>=tg?'good':npk>=tg*.6?'ok':'low';
+  return{net,npk,gpk:km>0?fare/km:0,v};
+}
+const netFare=o=>o.fare*(1-(+D.set.comm||0)/100);
+
+/* ---------- Render ---------- */
+function render(){renderHome();renderOffers();renderRoads();renderEarn();renderSet();preview()}
+function renderHome(){
+  if(!D)return;
+  const acc=D.offers.filter(o=>o.acc&&today(o.ts)),ex=D.exp.filter(e=>today(e.ts));
+  const net=acc.reduce((s,o)=>s+netFare(o),0)-ex.reduce((s,e)=>s+e.amt,0);
+  $('kNet').textContent=(acc.length||ex.length)?fmt(net)+' '+cur():'—';
+  $('kRides').textContent=acc.length;
+  const now=Date.now();let ms=0;D.sess.forEach(s=>{if(today(s.s))ms+=(s.e||now)-s.s});
+  $('kTime').textContent=(ms/36e5).toFixed(1)+' '+t('h');
+  $('kCpk').textContent=+D.set.cpk>0?(+D.set.cpk)+' '+cur():'—';
+  const run=D.sess.length&&!D.sess[D.sess.length-1].e;
+  $('workBtn').textContent=t(run?'we':'ws');$('workBtn').classList.toggle('alt',!!run);
+  $('homeLog').innerHTML=D.offers.length?D.offers.slice(0,3).map(rowOffer).join(''):`<p class="mut">${t('empty')}</p>`;
+}
+function rowOffer(o){
+  const r=calc(o.fare,o.km);
+  return `<div class="row ${r.v==='nocost'?'':r.v}"><div><b>${esc(o.plat)}</b> · ${esc(zn(o.zone))}<br><small>${fmt(o.fare)} ${cur()} · ${o.km} km · ${r.gpk.toFixed(1)} ${t('gpk')}<br>${new Date(o.ts).toLocaleString(lang)}${o.note?'<br>'+esc(o.note):''}</small></div><div class="ac"><button class="sm ${o.acc?'on':''}" data-a="acc" data-id="${o.id}">${t(o.acc?'accd':'acc')}</button><button class="sm x" data-a="del" data-id="${o.id}">✕</button></div></div>`;
+}
+function renderOffers(){$('offers').innerHTML=D.offers.length?D.offers.map(rowOffer).join(''):`<p class="mut">${t('empty')}</p>`;$('cnt').textContent=D.offers.length+' '+t('req_u')}
+function renderRoads(){$('roads').innerHTML=D.roads.length?D.roads.map(r=>`<div class="row"><div><b>${esc(zn(r.zone))}</b> · ${t('s'+r.st)}<br><small>${new Date(r.ts).toLocaleString(lang)}</small></div><button class="sm x" data-a="rdel" data-id="${r.id}">✕</button></div>`).join(''):`<p class="mut">${t('road_none')}</p>`}
+function renderEarn(){
+  const f=D.offers.filter(o=>o.acc).reduce((s,o)=>s+netFare(o),0),e=D.exp.reduce((s,x)=>s+x.amt,0);
+  $('tF').textContent=fmt(f)+' '+cur();$('tE').textContent=fmt(e)+' '+cur();$('tN').textContent=fmt(f-e)+' '+cur();
+  $('exps').innerHTML=D.exp.length?D.exp.map(x=>`<div class="row"><div><b>${fmt(x.amt)} ${cur()}</b> · ${t('e'+x.type)}<br><small>${new Date(x.ts).toLocaleString(lang)}</small></div><button class="sm x" data-a="edel" data-id="${x.id}">✕</button></div>`).join(''):`<p class="mut">${t('empty')}</p>`;
+}
+function renderSet(){$('acct').textContent=user.phoneNumber||'';$('s_cpk').value=D.set.cpk||'';$('s_comm').value=D.set.comm||'';$('s_tgt').value=D.set.tgt||''}
+function preview(){
+  const f=+$('fare').value,k=+$('km').value,b=$('prev');
+  if(!(f>0&&k>0)){b.hidden=true;return}
+  const r=calc(f,k);b.hidden=false;b.className='prev '+(r.v==='nocost'?'':r.v);
+  b.innerHTML=`<b>${t('v_'+r.v)}</b><br><small>${t('gpk')}: ${r.gpk.toFixed(1)} · ${t('net')}: ${fmt(r.net)} ${cur()} (${r.npk.toFixed(1)}/km)</small>`;
+}
+
+/* ---------- Actions ---------- */
+$('fare').oninput=preview;$('km').oninput=preview;
+$('offerForm').onsubmit=e=>{e.preventDefault();
+  const fare=+$('fare').value,km=+$('km').value;if(!(fare>0&&km>0))return;
+  D.offers.unshift({id:Date.now(),ts:Date.now(),plat:$('plat').value==='1'?'inDrive':$('plat').value,fare,km,zone:+$('zone').value,note:$('note').value.trim().slice(0,200),acc:false});
+  save();e.target.reset();render()};
+$('roadForm').onsubmit=e=>{e.preventDefault();D.roads.unshift({id:Date.now(),ts:Date.now(),zone:+$('rzone').value,st:+$('rst').value});D.roads=D.roads.slice(0,50);save();renderRoads()};
+$('expForm').onsubmit=e=>{e.preventDefault();const amt=+$('eamt').value;if(!(amt>0))return;D.exp.unshift({id:Date.now(),ts:Date.now(),amt,type:+$('etype').value});save();e.target.reset();render()};
+$('workBtn').onclick=()=>{const l=D.sess[D.sess.length-1];if(l&&!l.e)l.e=Date.now();else D.sess.push({s:Date.now(),e:null});save();renderHome()};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b||!D)return;const id=+b.dataset.id,a=b.dataset.a;
+  if(a==='acc'){const o=D.offers.find(x=>x.id===id);if(o)o.acc=!o.acc}
+  if(a==='del')D.offers=D.offers.filter(x=>x.id!==id);
+  if(a==='rdel')D.roads=D.roads.filter(x=>x.id!==id);
+  if(a==='edel')D.exp=D.exp.filter(x=>x.id!==id);
+  save();render();
+});
+['cpk','comm','tgt'].forEach(k=>$('s_'+k).oninput=e=>{D.set[k]=e.target.value;save();renderHome();renderOffers();renderEarn();preview()});
+$('expBtn').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D,null,2)],{type:'application/json'}));a.download='cirta-radar-data.json';document.body.appendChild(a);a.click();a.remove()};
+$('clrBtn').onclick=()=>{if(confirm(t('cfm'))){D={offers:[],exp:[],roads:[],sess:[],set:{}};save();render()}};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  view=b.dataset.v;document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!=='v-'+view);
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));window.scrollTo(0,0)});
+setInterval(()=>{if(user&&D)renderHome()},30000);
+
+/* ---------- Gate: dashboard only after sign-in ---------- */
+onAuthStateChanged(auth,u=>{
+  window.__ok=1;user=u;$('splash').hidden=true;
+  if(u){load();$('auth').hidden=true;$('app').hidden=false;applyLang()}
+  else{D=null;$('app').hidden=true;$('auth').hidden=false;$('s1').hidden=false;$('s2').hidden=true;$('otp').value='';resetRv();applyLang()}
+},e=>{window.__ok=1;$('splash').hidden=true;$('auth').hidden=false;showErr(e)});
+applyLang();
 </script>
-</body></html>
+</body>
+</html>
